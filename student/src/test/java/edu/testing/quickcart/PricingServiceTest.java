@@ -244,6 +244,15 @@ class PricingServiceTest {
     }
 
     @Test
+    void couponEqualToMerchandiseLeavesZeroBalanceAndPaidShipping() {
+        var c = coupon("60.00", DATE.minusDays(1), DATE.plusDays(1));
+        var q = quote("60.00", 1, CustomerTier.STANDARD, c, "ON", DATE);
+
+        money("0.00", q.merchandise());
+        money("8.99", q.shipping());
+    }
+
+    @Test
     void belowFreeShippingThresholdCostsEightNinetyNine() {
 
         money(

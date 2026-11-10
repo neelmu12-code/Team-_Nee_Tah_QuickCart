@@ -190,6 +190,26 @@ class KnownDefectsTest {
     }
 
     @Test
+    void declinedMultiProductPaymentMustPreserveEveryStockBalance() {
+        var inventory = new InMemoryInventory(Map.of("SKU-1", 5, "SKU-2", 5));
+        PaymentGateway payment = mock(PaymentGateway.class);
+        when(payment.authorize(anyString(), any(BigDecimal.class))).thenReturn(false);
+        var checkout = new OrderService(pricing, inventory, payment);
+        var second = new Product("SKU-2", "Second item", new BigDecimal("150.00"));
+
+        var result = checkout.placeOrder("C-DECLINED",
+                List.of(item("200.00", 2), new CartItem(second, 1)),
+                CustomerTier.STANDARD, null, "ON", DATE);
+
+        assertEquals(OrderResult.Status.PAYMENT_DECLINED, result.status());
+        verify(payment).authorize("C-DECLINED", new BigDecimal("621.50"));
+        assertAll(
+                () -> assertEquals(5, inventory.available("SKU-1")),
+                () -> assertEquals(5, inventory.available("SKU-2"))
+        );
+    }
+
+    @Test
     void authorizationMustHappenBeforeInventoryReservation() {
 
         InventoryService inventory = mock(

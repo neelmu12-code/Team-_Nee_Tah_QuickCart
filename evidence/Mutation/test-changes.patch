@@ -1,0 +1,51 @@
+diff --git a/student/src/test/java/edu/testing/quickcart/KnownDefectsTest.java b/student/src/test/java/edu/testing/quickcart/KnownDefectsTest.java
+index c30966e..3c12e1f 100644
+--- a/student/src/test/java/edu/testing/quickcart/KnownDefectsTest.java
++++ b/student/src/test/java/edu/testing/quickcart/KnownDefectsTest.java
+@@ -189,6 +189,26 @@ class KnownDefectsTest {
+         );
+     }
+ 
++    @Test
++    void declinedMultiProductPaymentMustPreserveEveryStockBalance() {
++        var inventory = new InMemoryInventory(Map.of("SKU-1", 5, "SKU-2", 5));
++        PaymentGateway payment = mock(PaymentGateway.class);
++        when(payment.authorize(anyString(), any(BigDecimal.class))).thenReturn(false);
++        var checkout = new OrderService(pricing, inventory, payment);
++        var second = new Product("SKU-2", "Second item", new BigDecimal("150.00"));
++
++        var result = checkout.placeOrder("C-DECLINED",
++                List.of(item("200.00", 2), new CartItem(second, 1)),
++                CustomerTier.STANDARD, null, "ON", DATE);
++
++        assertEquals(OrderResult.Status.PAYMENT_DECLINED, result.status());
++        verify(payment).authorize("C-DECLINED", new BigDecimal("621.50"));
++        assertAll(
++                () -> assertEquals(5, inventory.available("SKU-1")),
++                () -> assertEquals(5, inventory.available("SKU-2"))
++        );
++    }
++
+     @Test
+     void authorizationMustHappenBeforeInventoryReservation() {
+ 
+diff --git a/student/src/test/java/edu/testing/quickcart/PricingServiceTest.java b/student/src/test/java/edu/testing/quickcart/PricingServiceTest.java
+index 85d7ef5..1f48de8 100644
+--- a/student/src/test/java/edu/testing/quickcart/PricingServiceTest.java
++++ b/student/src/test/java/edu/testing/quickcart/PricingServiceTest.java
+@@ -243,6 +243,15 @@ class PricingServiceTest {
+         );
+     }
+ 
++    @Test
++    void couponEqualToMerchandiseLeavesZeroBalanceAndPaidShipping() {
++        var c = coupon("60.00", DATE.minusDays(1), DATE.plusDays(1));
++        var q = quote("60.00", 1, CustomerTier.STANDARD, c, "ON", DATE);
++
++        money("0.00", q.merchandise());
++        money("8.99", q.shipping());
++    }
++
+     @Test
+     void belowFreeShippingThresholdCostsEightNinetyNine() {
+ 
