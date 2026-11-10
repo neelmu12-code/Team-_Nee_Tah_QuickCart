@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PricingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">quickcart-testing-project</a> &gt; <a href="index.source.html" class="el_package">edu.testing.quickcart.service</a> &gt; <span class="el_source">PricingService.java</span></div><h1>PricingService.java</h1><pre class="source lang-java linenums">package edu.testing.quickcart.service;
+
+import edu.testing.quickcart.model.*;
+import java.math.*;
+import java.time.LocalDate;
+import java.util.*;
+
+<span class="fc" id="L8">public class PricingService {</span>
+<span class="fc" id="L9">    private static final BigDecimal BULK_RATE = new BigDecimal(&quot;0.05&quot;);</span>
+<span class="fc" id="L10">    private static final BigDecimal GOLD_RATE = new BigDecimal(&quot;0.10&quot;);</span>
+<span class="fc" id="L11">    private static final BigDecimal SHIPPING = new BigDecimal(&quot;8.99&quot;);</span>
+<span class="fc" id="L12">    private static final BigDecimal FREE_SHIPPING_THRESHOLD = new BigDecimal(&quot;100.00&quot;);</span>
+<span class="fc" id="L13">    private static final BigDecimal COUPON_MINIMUM = new BigDecimal(&quot;50.00&quot;);</span>
+
+    public OrderQuote quote(List&lt;CartItem&gt; items, CustomerTier tier, Coupon coupon,
+                            String province, LocalDate orderDate) {
+<span class="fc" id="L17">        Objects.requireNonNull(items); Objects.requireNonNull(tier);</span>
+<span class="fc" id="L18">        Objects.requireNonNull(province); Objects.requireNonNull(orderDate);</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (items.isEmpty()) throw new IllegalArgumentException(&quot;cart must not be empty&quot;);</span>
+
+<span class="fc" id="L21">        BigDecimal merchandise = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        for (CartItem item : items) {</span>
+<span class="fc" id="L23">            BigDecimal line = item.product().unitPrice().multiply(BigDecimal.valueOf(item.quantity()));</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">            if (item.quantity() &gt; 10) { // seeded boundary defect</span>
+<span class="fc" id="L25">                line = line.multiply(BigDecimal.ONE.subtract(BULK_RATE));</span>
+            }
+<span class="fc" id="L27">            merchandise = merchandise.add(line);</span>
+<span class="fc" id="L28">        }</span>
+
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (tier == CustomerTier.GOLD) {</span>
+<span class="fc" id="L31">            merchandise = merchandise.multiply(BigDecimal.ONE.subtract(GOLD_RATE));</span>
+        }
+
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (coupon != null &amp;&amp; isActive(coupon, orderDate)</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">                &amp;&amp; merchandise.compareTo(COUPON_MINIMUM) &gt;= 0) {</span>
+<span class="fc" id="L36">            merchandise = merchandise.subtract(coupon.amountOff());</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (merchandise.signum() &lt; 0) merchandise = BigDecimal.ZERO;</span>
+        }
+
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        BigDecimal shipping = merchandise.compareTo(FREE_SHIPPING_THRESHOLD) &gt; 0</span>
+<span class="fc" id="L41">                ? BigDecimal.ZERO : SHIPPING; // seeded threshold defect</span>
+
+<span class="fc" id="L43">        BigDecimal taxRate = taxRateFor(province);</span>
+<span class="fc" id="L44">        BigDecimal tax = merchandise.multiply(taxRate).setScale(2, RoundingMode.HALF_UP); // seeded tax-base defect</span>
+<span class="fc" id="L45">        merchandise = merchandise.setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L46">        shipping = shipping.setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L47">        BigDecimal total = merchandise.add(shipping).add(tax).setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L48">        return new OrderQuote(merchandise, shipping, tax, total);</span>
+    }
+
+    private boolean isActive(Coupon c, LocalDate d) {
+<span class="fc bfc" id="L52" title="All 4 branches covered.">        return d.isAfter(c.startDate()) &amp;&amp; d.isBefore(c.endDate()); // seeded inclusivity defect</span>
+    }
+
+    private BigDecimal taxRateFor(String province) {
+<span class="fc bfc" id="L56" title="All 4 branches covered.">        return switch (province.toUpperCase(Locale.ROOT)) {</span>
+<span class="fc" id="L57">            case &quot;ON&quot; -&gt; new BigDecimal(&quot;0.13&quot;);</span>
+<span class="fc" id="L58">            case &quot;BC&quot; -&gt; new BigDecimal(&quot;0.12&quot;);</span>
+<span class="fc" id="L59">            case &quot;AB&quot; -&gt; new BigDecimal(&quot;0.05&quot;);</span>
+<span class="fc" id="L60">            default -&gt; throw new IllegalArgumentException(&quot;unsupported province: &quot; + province);</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

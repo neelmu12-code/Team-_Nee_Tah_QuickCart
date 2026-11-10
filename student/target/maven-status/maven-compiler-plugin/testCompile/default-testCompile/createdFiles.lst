@@ -1,0 +1,10 @@
+edu\testing\quickcart\AITest.class
+edu\testing\quickcart\KnownDefectsTest.class
+edu\testing\quickcart\PricingPropertyTest.class
+edu\testing\quickcart\TestFixtures.class
+edu\testing\quickcart\ModelAndInventoryTest.class
+edu\testing\quickcart\PricingServiceTest.class
+edu\testing\quickcart\OrderIntegrationTest.class
+edu\testing\quickcart\OrderServiceTest.class
+edu\testing\quickcart\AIOrderServiceTest.class
+edu\testing\quickcart\SmokeTest.class
