@@ -1,0 +1,27 @@
+Recorded experiment environment, November 11, 2026
+
+Maven: Apache Maven 3.10.0 (c43a36b8d67be7e0805a411bc0898af1a51f5472)
+Maven home: C:\Users\M920q\Downloads\apache-maven-3.10.0-bin\apache-maven-3.10.0
+Java: Eclipse Adoptium 25.0.2, runtime 25.0.2+10-LTS
+Java home: C:\Program Files\Eclipse Adoptium\jdk-25.0.2.10-hotspot
+Compilation release: 17
+OS: Windows 11, amd64
+Maven-reported default locale: en_US
+Platform encoding: UTF-8
+Time zone: America/New_York
+
+Configured project tools:
+JUnit: 5.11.4
+Mockito: 5.15.2
+jqwik: 1.9.2
+JaCoCo: 0.8.14
+PIT: 1.20.7
+PIT JUnit 5 plugin: 1.2.3
+Byte Buddy: 1.15.11 (observed in test log)
+
+Runs used an already cached dependency repository copied into a temporary directory.
+
+The unreviewed treatment candidate encountered an additional, substantive tool
+compatibility problem: concrete-class spying tried to instrument JDK 25 Object,
+which the bundled Byte Buddy version rejects. That actual failed run is retained
+in treatment-initial-failure/run.log, separately from the reviewed treatment.

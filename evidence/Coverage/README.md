@@ -73,18 +73,20 @@ Adding more ordinary happy-path inputs solely to maintain a percentage offers le
 
 ## Reproduce
 
-Run from the repository root in PowerShell. Use the student POM explicitly; the root POM is a separate project configuration.
+The November 10 snapshot above was measured in the original `student/` module. On November 11 the executable POM and unchanged production sources moved to the repository root to match the required submission layout. The commands below use that current layout and may include later test additions; they do not recreate the historical test selection automatically.
+
+Run from the repository root in PowerShell.
 
 ```powershell
-mvn -f student/pom.xml clean test
+mvn clean test
 ```
 
-This generates `student/target/site/jacoco/index.html`, `jacoco.csv`, and `jacoco.xml`. The checked-in `jacoco/` folder is the saved output of that default run. Save that output before running other configurations.
+This generates `target/site/jacoco/index.html`, `jacoco.csv`, and `jacoco.xml`. The checked-in `jacoco/` folder remains the saved output of the original 50-test run. Save new output before running other configurations. The later controlled AI experiment has its own snapshots under [../ai/measurements/](../ai/measurements/).
 
 Run the excluded specification regressions separately:
 
 ```powershell
-mvn -B -ntp -f student/pom.xml test "-Dgroups=known-defect" "-Dquickcart.excludedGroups=none" "-Djacoco.destFile=target/jacoco-known-defects.exec"
+mvn -B -ntp test "-Dgroups=known-defect" "-Dquickcart.excludedGroups=none" "-Djacoco.destFile=target/jacoco-known-defects.exec"
 ```
 
 This command is expected to exit with a test failure for the measured revision. It uses a separate execution-data file so it does not append failing-test coverage to the passing suite's data. Maven stops at the test failures, so this second run does not generate a new JaCoCo report. The saved HTML/CSV/XML all refer to the first, successful run.

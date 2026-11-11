@@ -69,18 +69,20 @@ The useful next implementation step would be to fix the specification defects un
 
 ## Reproduce
 
+These are current-layout commands. The saved November 10 runs above used the original `student/` module. On November 11 the executable POM and unchanged production sources moved to the root; later AI experiment additions have their own [separate measurements](../ai/measurements/). Running the current suite does not recreate the historical before/after selections automatically.
+
 From the repository root in PowerShell:
 
 ```powershell
-mvn -B -ntp -f student/pom.xml test org.pitest:pitest-maven:mutationCoverage
+mvn -B -ntp test org.pitest:pitest-maven:mutationCoverage
 ```
 
-The generated report is `student/target/pit-reports/index.html`, with XML beside it. Copy the whole report directory before another run because the configuration uses non-timestamped reports. The saved `before/` report predates the two additions recorded in `test-changes.patch`; `after/` includes them. Both runs used the same command and configuration.
+The generated report is `target/pit-reports/index.html`, with XML beside it. Copy the whole report directory before another run because the configuration uses non-timestamped reports. The saved `before/` report predates the two additions recorded in `test-changes.patch`; `after/` includes them. Both historical runs used the same command and configuration.
 
 To reproduce the new, intentionally failing specification regression separately:
 
 ```powershell
-mvn -B -ntp -f student/pom.xml test "-Dtest=KnownDefectsTest#declinedMultiProductPaymentMustPreserveEveryStockBalance" "-Dquickcart.excludedGroups=none" "-Djacoco.destFile=target/jacoco-mutation-regression.exec"
+mvn -B -ntp test "-Dtest=KnownDefectsTest#declinedMultiProductPaymentMustPreserveEveryStockBalance" "-Dquickcart.excludedGroups=none" "-Djacoco.destFile=target/jacoco-mutation-regression.exec"
 ```
 
-That command is expected to exit with a test failure until the inventory/payment defect is fixed. The separate JaCoCo execution file keeps this diagnostic run apart from default coverage data. The earlier [coverage analysis](../Coverage/README.md) remains a historical snapshot of its original 50-test run.
+That command is expected to exit with a test failure until the inventory/payment defect is fixed. The separate JaCoCo execution file keeps this diagnostic run apart from default coverage data. The earlier [coverage analysis](../coverage/README.md) remains a historical snapshot of its original 50-test run.

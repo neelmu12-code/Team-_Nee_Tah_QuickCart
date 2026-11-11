@@ -1,0 +1,176 @@
+{
+  "diagnostic": {
+    "tests": 14,
+    "failures": 14,
+    "errors": 0,
+    "skipped": 0
+  },
+  "control": {
+    "surefire": {
+      "tests": 51,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "coverage": [
+      {
+        "type": "INSTRUCTION",
+        "missed": "0",
+        "covered": "522"
+      },
+      {
+        "type": "BRANCH",
+        "missed": "0",
+        "covered": "52"
+      },
+      {
+        "type": "LINE",
+        "missed": "0",
+        "covered": "77"
+      },
+      {
+        "type": "COMPLEXITY",
+        "missed": "0",
+        "covered": "44"
+      },
+      {
+        "type": "METHOD",
+        "missed": "0",
+        "covered": "17"
+      },
+      {
+        "type": "CLASS",
+        "missed": "0",
+        "covered": "10"
+      }
+    ],
+    "mutation_statuses": {
+      "KILLED": 27,
+      "SURVIVED": 4
+    },
+    "survivors": [
+      {
+        "mutatedClass": "edu.testing.quickcart.service.PricingService",
+        "mutatedMethod": "quote",
+        "lineNumber": "24",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "62"
+        ]
+      },
+      {
+        "mutatedClass": "edu.testing.quickcart.service.PricingService",
+        "mutatedMethod": "quote",
+        "lineNumber": "37",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "122"
+        ]
+      },
+      {
+        "mutatedClass": "edu.testing.quickcart.service.PricingService",
+        "mutatedMethod": "quote",
+        "lineNumber": "40",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "131"
+        ]
+      },
+      {
+        "mutatedClass": "edu.testing.quickcart.service.OrderService",
+        "mutatedMethod": "placeOrder",
+        "lineNumber": "23",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "36"
+        ]
+      }
+    ],
+    "killed_with_recorded_ai_test_as_killing_test": 0
+  },
+  "treatment": {
+    "surefire": {
+      "tests": 52,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "coverage": [
+      {
+        "type": "INSTRUCTION",
+        "missed": "0",
+        "covered": "522"
+      },
+      {
+        "type": "BRANCH",
+        "missed": "0",
+        "covered": "52"
+      },
+      {
+        "type": "LINE",
+        "missed": "0",
+        "covered": "77"
+      },
+      {
+        "type": "COMPLEXITY",
+        "missed": "0",
+        "covered": "44"
+      },
+      {
+        "type": "METHOD",
+        "missed": "0",
+        "covered": "17"
+      },
+      {
+        "type": "CLASS",
+        "missed": "0",
+        "covered": "10"
+      }
+    ],
+    "mutation_statuses": {
+      "KILLED": 27,
+      "SURVIVED": 4
+    },
+    "survivors": [
+      {
+        "mutatedClass": "edu.testing.quickcart.service.PricingService",
+        "mutatedMethod": "quote",
+        "lineNumber": "24",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "62"
+        ]
+      },
+      {
+        "mutatedClass": "edu.testing.quickcart.service.PricingService",
+        "mutatedMethod": "quote",
+        "lineNumber": "37",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "122"
+        ]
+      },
+      {
+        "mutatedClass": "edu.testing.quickcart.service.PricingService",
+        "mutatedMethod": "quote",
+        "lineNumber": "40",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "131"
+        ]
+      },
+      {
+        "mutatedClass": "edu.testing.quickcart.service.OrderService",
+        "mutatedMethod": "placeOrder",
+        "lineNumber": "23",
+        "mutator": "org.pitest.mutationtest.engine.gregor.mutators.ConditionalsBoundaryMutator",
+        "indexes": [
+          "36"
+        ]
+      }
+    ],
+    "killed_with_recorded_ai_test_as_killing_test": 0
+  },
+  "same_survivors": true,
+  "production_hashes_unchanged": true
+}
